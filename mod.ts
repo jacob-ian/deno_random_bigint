@@ -1,6 +1,5 @@
 /**
- * This module finds a random bigint integer between a user defined
- * range of integers.
+ * This module finds a random bigint integer from a desired bit size.
  * 
  * @author Jacob Ian Matthews
  * @version 1.0 04/07/2020
