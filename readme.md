@@ -1,4 +1,4 @@
-# 🦕 Deno Random BigInt Generator
+# Deno Random BigInt Generator 🦕 
 ## Description
 A random integer generator made for Deno. 
 
