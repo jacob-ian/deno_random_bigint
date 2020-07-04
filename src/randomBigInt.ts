@@ -10,7 +10,7 @@
  * Generate a random BigInt given a bit-size
  * @param bitsize the bit-size (e.g. 2048, 1024, etc.)
  */
-export function randomBigIntByBits(bitsize: number): bigint {
+export function randomBigIntBits(bitsize: number): bigint {
   // Find the largest integer possible from the bitsize
   const max = 2n ** BigInt(bitsize);
 
@@ -69,7 +69,7 @@ export function randomBigIntByBits(bitsize: number): bigint {
  * @param min the minimum integer in the range
  * @param max the maximum integer in the range
  */
-export function randomBigIntByRange(min: bigint, max: bigint): bigint {
+export function randomBigIntRange(min: bigint, max: bigint): bigint {
   // We will first find how many bits are in the inputted
   // min and max values
   const minBits = min.toString(2).length;
@@ -79,7 +79,7 @@ export function randomBigIntByRange(min: bigint, max: bigint): bigint {
   const randBits = randomInt(minBits, maxBits);
 
   // Get a random integer at that bitsize
-  const random = randomBigIntByBits(randBits);
+  const random = randomBigIntBits(randBits);
 
   // Ensure it is within the proper range
   if (random < max && random > min) {
@@ -87,7 +87,7 @@ export function randomBigIntByRange(min: bigint, max: bigint): bigint {
     return random;
   } else {
     // Re-run the function
-    return randomBigIntByRange(min, max);
+    return randomBigIntRange(min, max);
   }
 }
 

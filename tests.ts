@@ -7,7 +7,7 @@
 
 // Imports
 import { assertEquals } from "https://deno.land/std/testing/asserts.ts";
-import { randomBigIntByBits, randomBigIntByRange } from "./mod.ts";
+import { randomBigIntBits, randomBigIntRange } from "./mod.ts";
 
 // Create the random bigint by bits test
 Deno.test("Random BigInt by Bit-size", () => {
@@ -15,7 +15,7 @@ Deno.test("Random BigInt by Bit-size", () => {
   const bitsize = 2048;
 
   // Generate the 2048-bit random integer
-  const random = randomBigIntByBits(bitsize);
+  const random = randomBigIntBits(bitsize);
 
   // Calculate the minimum and maximum values
   const min = 2n ** BigInt(bitsize - 1);
@@ -32,7 +32,7 @@ Deno.test("Random BigInt by Range", () => {
   const max = 2n ** 1024n;
 
   // Generate the the random bigint
-  const random = randomBigIntByRange(min, max);
+  const random = randomBigIntRange(min, max);
 
   // Assert that the random bigint is within the range
   assertEquals((random > min) && (random < max), true);
