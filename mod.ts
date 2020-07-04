@@ -6,4 +6,4 @@
  */
 
 // Export the function
-export { randomBigInt } from "./src/randomBigInt.ts";
+export { randomBigIntByBits, randomBigIntByRange } from "./src/randomBigInt.ts";
