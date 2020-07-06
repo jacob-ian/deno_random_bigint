@@ -17,21 +17,23 @@ export function randomBigIntBits(bitsize: number): bigint {
   // Find the smallest integer possible from the bitsize
   const min = 2n ** BigInt(bitsize - 1);
 
-  // Get the number of bytes from the bitsize
-  const n = bitsize / 8;
+  // Create a variable to store the random integer
+  var random: bigint = 0n;
 
-  // Define the hexadecimal characters
-  const chars = "0123456789abcdef";
+  // Check the number of bits to determine whether to use hex or not
+  if (bitsize >= 8) {
+    // Get the number of bytes from the bitsize
+    const n = bitsize / 8;
 
-  // Generate n random bytes and append them to a hexadecimal string
-  var hexstring = "0x";
+    // Define the hexadecimal characters
+    const chars = "0123456789abcdef";
 
-  // Create an output variable
-  var random = 0n;
+    // Generate n random bytes and append them to a hexadecimal string
+    var hexstring = "0x";
 
-  // Create a while loop to generate random numbers
-  var loop = true;
-  while (loop) {
+    // Create an output variable
+    var random = 0n;
+
     // Loop through to choose random bytes
     for (var i = 0; i < n; i++) {
       // Generate two random integers from 0 to 15
@@ -46,21 +48,38 @@ export function randomBigIntBits(bitsize: number): bigint {
       hexstring += `${char1}${char2}`;
     }
 
-    // Convert the hexstring into a bigint
+    // Convert the byte string into a bigint
     random = BigInt(hexstring);
+  } else {
+    // There is less than one byte, so we must use binary.
+    // Create a binary string with a 1 in the first position
+    var binary = "1";
 
-    // Compare the random integer to the maximum integer
-    if (max > random && min < random) {
-      // Stop the loop
-      loop = false;
-    } else {
-      // Reset the hex string and start again
-      hexstring = "0x";
+    // We can now choose random 0s or 1s for the remaining bits (bitsize - 1)
+    const bits = bitsize - 1;
+    for (var i = 0; i < bits; i++) {
+      // Generate a random decimal number
+      const rNum = Math.random();
+
+      // Round the number to 0 or 1
+      const bin = Math.round(rNum);
+
+      // Add the number to the binary string
+      binary += bin;
     }
+
+    // Convert the binary string to a bigint
+    random = BigInt(binary);
   }
 
-  // Return the random integer
-  return random;
+  // Compare the random integer to the maximum integer
+  if (max > random && min < random) {
+    // Return the random integer
+    return random;
+  } else {
+    // Restart the function
+    return randomBigIntBits(bitsize);
+  }
 }
 
 /**
