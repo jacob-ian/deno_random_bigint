@@ -11,15 +11,15 @@ import { randomBigIntBits, randomBigIntRange } from "./mod.ts";
 
 // Create the random bigint by bits test
 Deno.test("Random BigInt by Bit-size", () => {
-  // Define the bitsize
-  const bitsize = 2048;
+  // Define the bit-length
+  const bitlength = 2048;
 
   // Generate the 2048-bit random integer
-  const random = randomBigIntBits(bitsize);
+  const random = randomBigIntBits(bitlength);
 
   // Calculate the minimum and maximum values
-  const min = 2n ** BigInt(bitsize - 1);
-  const max = 2n ** BigInt(bitsize);
+  const min = 2n ** BigInt(bitlength - 1);
+  const max = 2n ** BigInt(bitlength);
 
   // Check to see if the random integer is in the correct range
   assertEquals(random > min && random < max, true);

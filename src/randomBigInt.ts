@@ -7,23 +7,23 @@
 
 /* FUNCTIONS */
 /**
- * Generate a random BigInt given a bit-size
- * @param bitsize the bit-size (e.g. 2048, 1024, etc.)
+ * Generate a random BigInt given a bit-length
+ * @param bitlength the bit-length (e.g. 2048, 1024, etc.)
  */
-export function randomBigIntBits(bitsize: number): bigint {
-  // Find the largest integer possible from the bitsize
-  const max = 2n ** BigInt(bitsize);
+export function randomBigIntBits(bitlength: number): bigint {
+  // Find the largest integer possible from the bit-length
+  const max = 2n ** BigInt(bitlength);
 
-  // Find the smallest integer possible from the bitsize
-  const min = 2n ** BigInt(bitsize - 1);
+  // Find the smallest integer possible from the bit-length
+  const min = 2n ** BigInt(bitlength - 1);
 
   // Create a variable to store the random integer
   var random: bigint = 0n;
 
   // Check the number of bits to determine whether to use hex or not
-  if (bitsize >= 8) {
-    // Get the number of bytes from the bitsize
-    const n = bitsize / 8;
+  if (bitlength >= 8) {
+    // Get the number of bytes from the bit-length
+    const n = bitlength / 8;
 
     // Define the hexadecimal characters
     const chars = "0123456789abcdef";
@@ -55,8 +55,8 @@ export function randomBigIntBits(bitsize: number): bigint {
     // Create a binary string with a 1 in the first position
     var binary = "1";
 
-    // We can now choose random 0s or 1s for the remaining bits (bitsize - 1)
-    const bits = bitsize - 1;
+    // We can now choose random 0s or 1s for the remaining bits (bitlength - 1)
+    const bits = bitlength - 1;
     for (var i = 0; i < bits; i++) {
       // Generate a random decimal number
       const rNum = Math.random();
@@ -78,7 +78,7 @@ export function randomBigIntBits(bitsize: number): bigint {
     return random;
   } else {
     // Restart the function
-    return randomBigIntBits(bitsize);
+    return randomBigIntBits(bitlength);
   }
 }
 
@@ -94,10 +94,10 @@ export function randomBigIntRange(min: bigint, max: bigint): bigint {
   const minBits = min.toString(2).length;
   const maxBits = max.toString(2).length;
 
-  // Find a random bit length within the range for the integer
+  // Find a random bit-length within the range for the integer
   const randBits = randomInt(minBits, maxBits);
 
-  // Get a random integer at that bitsize
+  // Get a random integer at that bit-length
   const random = randomBigIntBits(randBits);
 
   // Ensure it is within the proper range
