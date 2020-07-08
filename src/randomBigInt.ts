@@ -20,66 +20,70 @@ export function randomBigIntBits(bitlength: number): bigint {
   // Create a variable to store the random integer
   var random: bigint = 0n;
 
-  // Check the number of bits to determine whether to use hex or not
-  if (bitlength >= 8) {
-    // Get the number of bytes from the bit-length
-    const n = bitlength / 8;
+  // Create a loop to generate a random integer within the range
+  var generate = true;
+  while (generate) {
+    // Check the number of bits to determine whether to use hex or not
+    if (bitlength >= 8) {
+      // Get the number of bytes from the bit-length
+      const n = bitlength / 8;
 
-    // Define the hexadecimal characters
-    const chars = "0123456789abcdef";
+      // Define the hexadecimal characters
+      const chars = "0123456789abcdef";
 
-    // Generate n random bytes and append them to a hexadecimal string
-    var hexstring = "0x";
+      // Generate n random bytes and append them to a hexadecimal string
+      var hexstring = "0x";
 
-    // Create an output variable
-    var random = 0n;
+      // Create an output variable
+      var random = 0n;
 
-    // Loop through to choose random bytes
-    for (var i = 0; i < n; i++) {
-      // Generate two random integers from 0 to 15
-      const rand1 = randomInt(0, 15);
-      const rand2 = randomInt(0, 15);
+      // Loop through to choose random bytes
+      for (var i = 0; i < n; i++) {
+        // Generate two random integers from 0 to 15
+        const rand1 = randomInt(0, 15);
+        const rand2 = randomInt(0, 15);
 
-      // Select their corresponding characters from those available
-      const char1 = chars[rand1];
-      const char2 = chars[rand2];
+        // Select their corresponding characters from those available
+        const char1 = chars[rand1];
+        const char2 = chars[rand2];
 
-      // Append the characters to the string
-      hexstring += `${char1}${char2}`;
+        // Append the characters to the string
+        hexstring += `${char1}${char2}`;
+      }
+
+      // Convert the byte string into a bigint
+      random = BigInt(hexstring);
+    } else {
+      // There is less than one byte, so we must use binary.
+      // Create a binary string with a 1 in the first position
+      var binary = "1";
+
+      // We can now choose random 0s or 1s for the remaining bits (bitlength - 1)
+      const bits = bitlength - 1;
+      for (var i = 0; i < bits; i++) {
+        // Generate a random decimal number
+        const rNum = Math.random();
+
+        // Round the number to 0 or 1
+        const bin = Math.round(rNum);
+
+        // Add the number to the binary string
+        binary += bin;
+      }
+
+      // Convert the binary string to a bigint
+      random = BigInt(binary);
     }
 
-    // Convert the byte string into a bigint
-    random = BigInt(hexstring);
-  } else {
-    // There is less than one byte, so we must use binary.
-    // Create a binary string with a 1 in the first position
-    var binary = "1";
-
-    // We can now choose random 0s or 1s for the remaining bits (bitlength - 1)
-    const bits = bitlength - 1;
-    for (var i = 0; i < bits; i++) {
-      // Generate a random decimal number
-      const rNum = Math.random();
-
-      // Round the number to 0 or 1
-      const bin = Math.round(rNum);
-
-      // Add the number to the binary string
-      binary += bin;
+    // Check if the random integer is within the allowed range
+    if (max > random && min < random) {
+      // End the loop
+      generate = false;
     }
-
-    // Convert the binary string to a bigint
-    random = BigInt(binary);
   }
 
-  // Compare the random integer to the maximum integer
-  if (max > random && min < random) {
-    // Return the random integer
-    return random;
-  } else {
-    // Restart the function
-    return randomBigIntBits(bitlength);
-  }
+  // Return the random integer
+  return random;
 }
 
 /**
@@ -94,20 +98,28 @@ export function randomBigIntRange(min: bigint, max: bigint): bigint {
   const minBits = min.toString(2).length;
   const maxBits = max.toString(2).length;
 
-  // Find a random bit-length within the range for the integer
-  const randBits = randomInt(minBits, maxBits);
+  // Create a variable to store the random integer
+  var random = 0n;
 
-  // Get a random integer at that bit-length
-  const random = randomBigIntBits(randBits);
+  // Create a loop to generate the random integer until it finds
+  // one in the correct range
+  var generate = true;
+  while (generate) {
+    // Find a random bit-length within the range for the integer
+    const randBits = randomInt(minBits, maxBits);
 
-  // Ensure it is within the proper range
-  if (random < max && random > min) {
-    // Return the bigint
-    return random;
-  } else {
-    // Re-run the function
-    return randomBigIntRange(min, max);
+    // Get a random integer at that bit-length
+    random = randomBigIntBits(randBits);
+
+    // Ensure it is within the proper range
+    if (random < max && random > min) {
+      // Stop the loop
+      generate = false;
+    }
   }
+
+  // Return the random integer
+  return random;
 }
 
 /**
