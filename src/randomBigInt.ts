@@ -98,6 +98,9 @@ export function randomBigIntRange(min: bigint, max: bigint): bigint {
   const minBits = min.toString(2).length;
   const maxBits = max.toString(2).length;
 
+  // Find a random bit-length within the range for the integer
+  const randBits = randomInt(minBits, maxBits);
+
   // Create a variable to store the random integer
   var random = 0n;
 
@@ -105,9 +108,6 @@ export function randomBigIntRange(min: bigint, max: bigint): bigint {
   // one in the correct range
   var generate = true;
   while (generate) {
-    // Find a random bit-length within the range for the integer
-    const randBits = randomInt(minBits, maxBits);
-
     // Get a random integer at that bit-length
     random = randomBigIntBits(randBits);
 
