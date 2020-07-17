@@ -5,7 +5,7 @@ It can generate a random integer with a `bigint` type from either:
 * a desired bit-length (e.g. 2048-bit); or
 * a desired range.
 
-*Created by Jacob Ian Matthews ([Website](https://jacobianmatthews.com)  | [GitHub](https://github.com/jacob-ian))*
+*Created by Jacob Ian Matthews - [Website](https://jacobianmatthews.com)  | [GitHub](https://github.com/jacob-ian)*
 
 ## Usage
 
