@@ -1,7 +1,9 @@
 # Deno Random BigInt Generator 
 A random integer generator made for Deno. 
 
-It either accepts a desired bit-length for the integer and outputs the integer as a `bigint`, or a desired range for the random `bigint` to be within.
+It can generate a random integer in BigInt form from either:
+* a desired bit-length (e.g. 2048-bit); or
+* a desired range.
 
 *Created by Jacob Ian Matthews ([Website](https://jacobianmatthews.com)  | [GitHub](https://github.com/jacob-ian))*
 
