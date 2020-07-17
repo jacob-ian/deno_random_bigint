@@ -8,23 +8,25 @@
 /* FUNCTIONS */
 /**
  * Generate a random BigInt given a bit-length
- * @param bitlength the bit-length (e.g. 2048, 1024, etc.)
+ * @param bitlength the bit-length (e.g. 2048, 1024, etc.). Must be
+ * at least 8 (>= 8 ).
+ * @return 
  */
 export function randomBigIntBits(bitlength: number): bigint {
-  // Find the largest integer possible from the bit-length
-  const max = 2n ** BigInt(bitlength);
+  // Check the bit-length
+  if (bitlength >= 8) {
+    // Find the largest integer possible from the bit-length
+    const max = 2n ** BigInt(bitlength);
 
-  // Find the smallest integer possible from the bit-length
-  const min = 2n ** BigInt(bitlength - 1);
+    // Find the smallest integer possible from the bit-length
+    const min = 2n ** BigInt(bitlength - 1);
 
-  // Create a variable to store the random integer
-  var random: bigint = 0n;
+    // Create a variable to store the random integer
+    var random: bigint = 0n;
 
-  // Create a loop to generate a random integer within the range
-  var generate = true;
-  while (generate) {
-    // Check the number of bits to determine whether to use hex or not
-    if (bitlength >= 8) {
+    // Create a loop to generate a random integer within the range
+    var generate = true;
+    while (generate) {
       // Get the number of bytes from the bit-length
       const n = bitlength / 8;
 
@@ -53,37 +55,22 @@ export function randomBigIntBits(bitlength: number): bigint {
 
       // Convert the byte string into a bigint
       random = BigInt(hexstring);
-    } else {
-      // There is less than one byte, so we must use binary.
-      // Create a binary string with a 1 in the first position
-      var binary = "1";
 
-      // We can now choose random 0s or 1s for the remaining bits (bitlength - 1)
-      const bits = bitlength - 1;
-      for (var i = 0; i < bits; i++) {
-        // Generate a random decimal number
-        const rNum = Math.random();
-
-        // Round the number to 0 or 1
-        const bin = Math.round(rNum);
-
-        // Add the number to the binary string
-        binary += bin;
+      // Check if the random integer is within the allowed range
+      if (max > random && min < random) {
+        // End the loop
+        generate = false;
       }
-
-      // Convert the binary string to a bigint
-      random = BigInt(binary);
     }
 
-    // Check if the random integer is within the allowed range
-    if (max > random && min < random) {
-      // End the loop
-      generate = false;
-    }
+    // Return the random integer
+    return random;
+  } else {
+    // Throw an error
+    throw new Error(
+      "Please use a bit-length greater than 8 for the desired random integer.",
+    );
   }
-
-  // Return the random integer
-  return random;
 }
 
 /**
@@ -104,17 +91,41 @@ export function randomBigIntRange(min: bigint, max: bigint): bigint {
   // Create a variable to store the random integer
   var random = 0n;
 
-  // Create a loop to generate the random integer until it finds
-  // one in the correct range
-  var generate = true;
-  while (generate) {
-    // Get a random integer at that bit-length
-    random = randomBigIntBits(randBits);
+  // Check the random bit-length for if it is less than 8
+  if (randBits < 8) {
+    // Create a loop to generate numbers until one in the correct range is found
+    var generate = true;
+    while (generate) {
+      // We can calculate a random integer by finding a random number
+      // and multiplying it by the maximum number at this bit-length
 
-    // Ensure it is within the proper range
-    if (random < max && random > min) {
-      // Stop the loop
-      generate = false;
+      const randNum = Math.random();
+      const maxNum = Math.pow(2, randBits);
+
+      // We can thus find var random to be
+      random = BigInt(Math.round(randNum * maxNum));
+
+      // Ensure it is within the proper range
+      if (random < max && random > min) {
+        // Stop the loop
+        generate = false;
+      }
+    }
+  } else {
+    // Create a loop to generate the random integer by bit-length
+    // until it finds one within the correct range
+    var generate = true;
+    while (generate) {
+      // Create a loop to generate the random integer by bit-length
+      // until it finds one within the correct range
+      // Get a random integer at that bit-length
+      random = randomBigIntBits(randBits);
+
+      // Ensure it is within the proper range
+      if (random < max && random > min) {
+        // Stop the loop
+        generate = false;
+      }
     }
   }
 
